@@ -588,8 +588,6 @@ async function arcRun(channels: string[], time: string) {
   }
 }
 
-console.log(new Date().getMinutes());
-
 cron.schedule(
   "0,15,30,45 * * * *",
   async (date) => {

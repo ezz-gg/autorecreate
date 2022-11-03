@@ -482,7 +482,9 @@ async function arcCheck(Guilds: Collection<string, OAuth2Guild>, time: string) {
           let kansei: string[] = [];
 
           for (const str of splited) {
-            const vali = str.trim().match(/[0-2][0-9]:[0-5][0-9]/);
+            const vali = Array.from(
+              new Set(str.trim().match(/[0-2][0-9]:[0-5][0-9]/))
+            );
             if (vali) kansei.push(vali[0]);
           }
 

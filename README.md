@@ -3,7 +3,7 @@
 
 ## Official Bot
 
-### https://discord.com/api/oauth2/authorize?client_id=1037546372406202470&permissions=16&scope=applications.commands%20bot
+### https://discord.com/api/oauth2/authorize?client_id=1037546372406202470&permissions=16&scope=bot
 
 
 ## 何これ

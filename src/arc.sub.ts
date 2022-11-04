@@ -21,6 +21,7 @@ import {
   EmbedBuilder,
   Guild,
   OAuth2Guild,
+  PermissionsBitField,
   TextChannel,
 } from "discord.js";
 import * as cron from "node-cron";
@@ -437,30 +438,13 @@ export class Owner {
 function arcFixDate(date: Date | "manual") {
   const dateta = date as Date;
 
-  const min = dateta.getMinutes();
-  const hour = dateta.getHours();
+  let min = String(dateta.getMinutes());
+  let hour = String(dateta.getHours());
 
-  let text = hour + ":";
+  if (min.length === 1) min = "0" + min;
+  if (min.length === 1) hour = "0" + hour;
 
-  switch (true) {
-    case 0 <= min && 15 > min:
-      text += "00";
-      break;
-    case 15 <= min && 30 > min:
-      text += "15";
-      break;
-    case 30 <= min && 45 > min:
-      text += "30";
-      break;
-    case 45 <= min && 60 > min:
-      text += "45";
-      break;
-    default:
-      text += "00";
-      break;
-  }
-
-  if (text.length === 4) text = "0" + text;
+  let text = hour + ":" + min;
 
   return text;
 }
@@ -469,42 +453,42 @@ async function arcCheck(Guilds: Collection<string, OAuth2Guild>, time: string) {
   let g: Guild[] = [];
   for (const gu of Guilds) g.push(await gu[1].fetch());
 
-  const ch: TextChannel[] = [];
+  let chIds: string[] = [];
+
   for (const cha of g) {
-    if (cha.members.me?.permissions.has("ManageChannels")) {
+    if (
+      cha.members.me?.permissions.has(
+        PermissionsBitField.Flags.ManageChannels,
+        false
+      )
+    ) {
       const c = await cha.channels.fetch();
+
       for (const cha2 of c)
-        if (cha2[1].type === ChannelType.GuildText) ch.push(cha2[1]);
+        if (cha2[1])
+          if (cha2[1].type === ChannelType.GuildText) {
+            const ch = cha2[1] as TextChannel;
+
+            if (ch.topic) {
+              const result = ch.topic.match(/autorecreate\[(?<time>.*?)\]/);
+
+              if (result)
+                if (result.groups?.time) {
+                  const splited = result.groups.time.split(",");
+
+                  for (const str of splited) {
+                    const vali = Array.from(
+                      new Set(str.trim().match(/[0-2][0-9]:[0-5][0-9]/))
+                    );
+                    if (vali.length) if (vali[0] === time) chIds.push(ch.id);
+                  }
+                }
+            }
+          }
     }
   }
 
-  let channelKansei: string[] = [];
-
-  for (const c of ch) {
-    if (c.topic) {
-      const result = c.topic.match(/autorecreate\[(?<time>.*?)\]/);
-
-      if (result)
-        if (result.groups?.time) {
-          const splited = result.groups.time.split(",");
-
-          let kansei: string[] = [];
-
-          for (const str of splited) {
-            const vali = Array.from(
-              new Set(str.trim().match(/[0-2][0-9]:[0-5][0-9]/))
-            );
-            if (vali) kansei.push(vali[0]);
-          }
-
-          for (const jikan of kansei) {
-            if (jikan === time) channelKansei.push(c.id);
-          }
-        }
-    }
-  }
-
-  return channelKansei;
+  return chIds;
 }
 
 async function arcRun(channels: string[], time: string) {
@@ -550,12 +534,17 @@ async function arcRun(channels: string[], time: string) {
   }
 }
 
-cron.schedule("0,15,30,45 * * * *", async (date) => {
+cron.schedule("0,5,10,15,20,25,30,35,40,45,50,55 * * * *", async (date) => {
   const fixedDate = arcFixDate(date);
 
-  console.log(fixedDate);
+  console.log("処理開始：" + fixedDate);
 
-  const channels = await arcCheck(await Bot.guilds.fetch(), fixedDate);
+  const guilds = await Bot.guilds.fetch();
+
+  const channels = await arcCheck(guilds, fixedDate);
+
+  console.log("再作成対象のチャンネル数：" + channels.length);
+  console.log(channels);
 
   await arcRun(channels, fixedDate);
 

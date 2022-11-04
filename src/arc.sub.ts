@@ -110,6 +110,13 @@ async function statusChanger() {
     });
 
     await setTimeout(1000 * 5);
+
+    Bot.user?.setActivity({
+      name: "Servers: " + Bot.guilds.cache.size,
+      type: ActivityType.Playing,
+    });
+
+    await setTimeout(1000 * 5);
   }
 }
 

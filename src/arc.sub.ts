@@ -471,9 +471,11 @@ async function arcCheck(Guilds: Collection<string, OAuth2Guild>, time: string) {
 
   const ch: TextChannel[] = [];
   for (const cha of g) {
-    const c = await cha.channels.fetch();
-    for (const cha2 of c)
-      if (cha2[1].type === ChannelType.GuildText) ch.push(cha2[1]);
+    if (cha.members.me?.permissions.has("ManageChannels")) {
+      const c = await cha.channels.fetch();
+      for (const cha2 of c)
+        if (cha2[1].type === ChannelType.GuildText) ch.push(cha2[1]);
+    }
   }
 
   let channelKansei: string[] = [];
@@ -512,30 +514,32 @@ async function arcRun(channels: string[], time: string) {
     })) as TextChannel | null;
 
     if (ch) {
-      let newCh = await ch?.clone();
+      try {
+        let newCh = await ch?.clone();
 
-      await ch?.delete("Auto Recreate");
+        await ch?.delete("Auto Recreate");
 
-      await newCh?.setPosition(ch.position, { reason: "Auto Recreate" });
+        await newCh?.setPosition(ch.position, { reason: "Auto Recreate" });
 
-      if (ch.nsfw) await newCh.setNSFW(true, "Auto Recreate");
+        if (ch.nsfw) await newCh.setNSFW(true, "Auto Recreate");
 
-      if (ch.rateLimitPerUser)
-        await newCh.setRateLimitPerUser(ch.rateLimitPerUser, "Auto Recreate");
+        if (ch.rateLimitPerUser)
+          await newCh.setRateLimitPerUser(ch.rateLimitPerUser, "Auto Recreate");
 
-      const embed = new EmbedBuilder()
-        .setFooter({
-          text: ch.guild.name,
-          iconURL: ch.guild.iconURL() || undefined,
-        })
-        .addFields({
-          name: `現在時刻 ${time} をお知らせします！`,
-          value: "チャンネルの再作成が完了しました！",
+        const embed = new EmbedBuilder()
+          .setFooter({
+            text: ch.guild.name,
+            iconURL: ch.guild.iconURL() || undefined,
+          })
+          .addFields({
+            name: `現在時刻 ${time} をお知らせします！`,
+            value: "チャンネルの再作成が完了しました！",
+          });
+
+        await newCh.send({
+          embeds: [embed],
         });
-
-      newCh.send({
-        embeds: [embed],
-      });
+      } catch {}
     }
   }
 }

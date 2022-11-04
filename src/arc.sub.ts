@@ -512,59 +512,16 @@ async function arcRun(channels: string[], time: string) {
     })) as TextChannel | null;
 
     if (ch) {
-      let failCounter = 0;
+      let newCh = await ch?.clone();
 
-      let newCh: TextChannel | null = null;
+      await ch?.delete("Auto Recreate");
 
-      while (true) {
-        try {
-          newCh = await ch?.clone();
+      await newCh?.setPosition(ch.position, { reason: "Auto Recreate" });
 
-          break;
-        } catch {
-          if (failCounter > 5) {
-            break;
-          }
-          failCounter += 1;
-          await setTimeout(250);
-        }
-      }
+      if (ch.nsfw) await newCh.setNSFW(true, "Auto Recreate");
 
-      if (failCounter > 5) break;
-
-      failCounter = 0;
-
-      while (true) {
-        try {
-          await ch?.delete("Auto Recreate");
-
-          break;
-        } catch {
-          if (failCounter > 5) {
-            break;
-          }
-          failCounter += 1;
-          await setTimeout(250);
-        }
-      }
-
-      failCounter = 0;
-
-      while (true) {
-        try {
-          await newCh?.setPosition(ch.position, { reason: "Auto Recreate" });
-
-          break;
-        } catch {
-          if (failCounter > 5) {
-            break;
-          }
-          failCounter += 1;
-          await setTimeout(250);
-        }
-      }
-
-      failCounter = 0;
+      if (ch.rateLimitPerUser)
+        await newCh.setRateLimitPerUser(ch.rateLimitPerUser, "Auto Recreate");
 
       const embed = new EmbedBuilder()
         .setFooter({
@@ -576,42 +533,23 @@ async function arcRun(channels: string[], time: string) {
           value: "チャンネルの再作成が完了しました！",
         });
 
-      while (true) {
-        try {
-          await newCh?.send({
-            embeds: [embed],
-          });
-
-          break;
-        } catch {
-          if (failCounter > 5) {
-            break;
-          }
-          failCounter += 1;
-          await setTimeout(250);
-        }
-      }
+      newCh.send({
+        embeds: [embed],
+      });
     }
   }
 }
 
-cron.schedule(
-  "0,15,30,45 * * * *",
-  async (date) => {
-    const fixedDate = arcFixDate(date);
+cron.schedule("0,15,30,45 * * * *", async (date) => {
+  const fixedDate = arcFixDate(date);
 
-    console.log(fixedDate);
+  console.log(fixedDate);
 
-    const channels = await arcCheck(await Bot.guilds.fetch(), fixedDate);
+  const channels = await arcCheck(await Bot.guilds.fetch(), fixedDate);
 
-    await arcRun(channels, fixedDate);
+  await arcRun(channels, fixedDate);
 
-    data.total += channels.length;
+  data.total += channels.length;
 
-    await save();
-  },
-  {
-    name: "worker",
-    timezone: "Asia/Tokyo",
-  }
-);
+  await save();
+});

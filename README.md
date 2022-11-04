@@ -3,14 +3,14 @@
 
 ## Official Bot
 
-### https://discord.com/api/oauth2/authorize?client_id=1037546372406202470&permissions=16&scope=bot
+#### https://discord.com/api/oauth2/authorize?client_id=1037546372406202470&permissions=16&scope=bot
 
 
 ## 何これ
 
-### チャンネルを指定した時間に再作成するBotです！！
+#### チャンネルを指定した時間に再作成するBotです！！
 
-### 毎時の0分、15分、30分、45分に再作成をする必要があるチャンネルを探してチャンネルの再作成を行っております
+#### 毎時の0分、15分、30分、45分に再作成をする必要があるチャンネルを探してチャンネルの再作成を行っております
 
 
 ## 使い方

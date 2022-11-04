@@ -526,6 +526,12 @@ async function arcRun(channels: string[], time: string) {
         if (ch.rateLimitPerUser)
           await newCh.setRateLimitPerUser(ch.rateLimitPerUser, "Auto Recreate");
 
+        if (ch.defaultAutoArchiveDuration)
+          await newCh.setDefaultAutoArchiveDuration(
+            ch.defaultAutoArchiveDuration,
+            "Auto Recreate"
+          );
+
         const embed = new EmbedBuilder()
           .setFooter({
             text: ch.guild.name,

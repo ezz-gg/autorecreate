@@ -474,13 +474,18 @@ async function arcCheck(Guilds: Collection<string, OAuth2Guild>, time: string) {
 
               if (result)
                 if (result.groups?.time) {
-                  const splited = result.groups.time.split(",");
+                  const splited: string[] = result.groups.time.split(",");
 
                   for (const str of splited) {
-                    const vali = Array.from(
-                      new Set(str.trim().match(/[0-2][0-9]:[0-5][0-9]/))
-                    );
-                    if (vali.length) if (vali[0] === time) chIds.push(ch.id);
+                    const itibu = str
+                      .replace(/\s/g, "")
+                      .match(/[0-2][0-9]:[0-5][0-9]/);
+                    if (itibu)
+                      if (itibu.length)
+                        if (itibu[0] === time) {
+                          chIds.push(ch.id);
+                          break;
+                        }
                   }
                 }
             }

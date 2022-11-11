@@ -449,6 +449,16 @@ function arcFixDate(date: Date | "manual") {
   return text;
 }
 
+async function arcBlack(Guilds: Collection<string, OAuth2Guild>) {
+  Guilds.map(async (g1) => {
+    try {
+      const guild = await g1.fetch();
+
+      if (check(guild.id, false)) await guild.leave();
+    } catch {}
+  });
+}
+
 async function arcCheck(Guilds: Collection<string, OAuth2Guild>, time: string) {
   let g: Guild[] = [];
   for (const gu of Guilds) g.push(await gu[1].fetch());
@@ -482,8 +492,6 @@ async function arcCheck(Guilds: Collection<string, OAuth2Guild>, time: string) {
                       .match(/[0-2][0-9]:[0-5][0-9]/);
                     if (itibu)
                       if (itibu.length) {
-                        console.log(itibu[0]);
-
                         if (itibu[0] === time) {
                           chIds.push(ch.id);
                           break;
@@ -545,9 +553,13 @@ cron.schedule("0,5,10,15,20,25,30,35,40,45,50,55 * * * *", async (date) => {
 
   console.log("処理開始：" + fixedDate);
 
-  const guilds = await Bot.guilds.fetch();
+  const guilds1 = await Bot.guilds.fetch();
 
-  const channels = await arcCheck(guilds, fixedDate);
+  await arcBlack(guilds1);
+
+  const guilds2 = await Bot.guilds.fetch();
+
+  const channels = await arcCheck(guilds2, fixedDate);
 
   console.log("再作成対象のチャンネル数：" + channels.length);
   console.log(channels);

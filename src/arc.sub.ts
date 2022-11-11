@@ -57,10 +57,10 @@ function del(id: string, isAdmin: boolean) {
 }
 
 function check(id: string, isAdmin: boolean) {
-    if (isAdmin) if (data.admin[id]) return true;
-    if (!isAdmin) if (data.blacklist[id]) return true
+  if (isAdmin) if (data.admin[id]) return true;
+  if (!isAdmin) if (data.blacklist[id]) return true;
 
-    return false;
+  return false;
 }
 
 async function save() {
@@ -486,6 +486,7 @@ async function arcCheck(Guilds: Collection<string, OAuth2Guild>, time: string) {
                     const itibu = str
                       .replace(/\s/g, "")
                       .match(/[0-2][0-9]:[0-5][0-9]/);
+
                     if (itibu)
                       if (itibu.length) {
                         if (itibu[0] === time) {

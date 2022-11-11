@@ -481,11 +481,14 @@ async function arcCheck(Guilds: Collection<string, OAuth2Guild>, time: string) {
                       .replace(/\s/g, "")
                       .match(/[0-2][0-9]:[0-5][0-9]/);
                     if (itibu)
-                      if (itibu.length)
+                      if (itibu.length) {
+                        console.log(itibu[0]);
+
                         if (itibu[0] === time) {
                           chIds.push(ch.id);
                           break;
                         }
+                      }
                   }
                 }
             }
@@ -504,16 +507,14 @@ async function arcRun(channels: string[], time: string) {
 
     if (ch) {
       try {
-        let newCh = await ch?.clone();
+        const newCh = await ch?.clone({
+          reason: "Auto Recreate",
+          position: ch.position,
+          nsfw: ch.nsfw,
+          rateLimitPerUser: ch.rateLimitPerUser,
+        });
 
         await ch?.delete("Auto Recreate");
-
-        await newCh?.setPosition(ch.position, { reason: "Auto Recreate" });
-
-        if (ch.nsfw) await newCh.setNSFW(true, "Auto Recreate");
-
-        if (ch.rateLimitPerUser)
-          await newCh.setRateLimitPerUser(ch.rateLimitPerUser, "Auto Recreate");
 
         if (ch.defaultAutoArchiveDuration)
           await newCh.setDefaultAutoArchiveDuration(

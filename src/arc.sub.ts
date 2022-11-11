@@ -57,14 +57,10 @@ function del(id: string, isAdmin: boolean) {
 }
 
 function check(id: string, isAdmin: boolean) {
-  try {
-    if (isAdmin) data.admin[id];
-    if (!isAdmin) data.blacklist[id];
+    if (isAdmin) if (data.admin[id]) return true;
+    if (!isAdmin) if (data.blacklist[id]) return true
 
-    return true;
-  } catch {
     return false;
-  }
 }
 
 async function save() {

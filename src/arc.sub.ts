@@ -460,7 +460,7 @@ function arcFixDate(date: Date | "manual") {
   let hour = String(dateta.getHours());
 
   if (min.length === 1) min = "0" + min;
-  if (min.length === 1) hour = "0" + hour;
+  if (hour.length === 1) hour = "0" + hour;
 
   let text = hour + ":" + min;
 

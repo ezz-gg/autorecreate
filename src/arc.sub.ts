@@ -139,6 +139,28 @@ export class Events {
 }
 
 @Discord()
+export class Other {
+  @Slash({
+    name: "ping",
+    description: "通信の遅延を表示します。",
+  })
+  async ping(interaction: CommandInteraction) {
+    await interaction.deferReply({ ephemeral: true });
+
+    const embed = new EmbedBuilder()
+      .setTitle("Pong!")
+      .addFields({ name: "Websocket Latency", value: Bot.ws.ping + "ms" })
+      .addFields({
+        name: "API Latency",
+        value: Date.now() - interaction.createdTimestamp + "ms",
+      });
+
+    await interaction.editReply({
+      embeds: [embed],
+    });
+  }
+}
+@Discord()
 @SlashGroup({ name: "owner" })
 @SlashGroup({ name: "blacklist", root: "owner" })
 @SlashGroup({ name: "adminlist", root: "owner" })

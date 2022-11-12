@@ -536,7 +536,6 @@ async function arcRun(channels: string[], time: string) {
       try {
         const newCh = await ch?.clone({
           reason: "Auto Recreate",
-          position: ch.position,
           nsfw: ch.nsfw,
           rateLimitPerUser: ch.rateLimitPerUser,
         });
@@ -548,6 +547,8 @@ async function arcRun(channels: string[], time: string) {
             ch.defaultAutoArchiveDuration,
             "Auto Recreate"
           );
+
+        await newCh.setPosition(ch.position, { reason: "Auto Recreate" });
 
         const embed = new EmbedBuilder()
           .setFooter({

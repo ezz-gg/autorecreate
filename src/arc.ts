@@ -1,7 +1,7 @@
 import { dirname, importx } from "@discordx/importer";
 import { GatewayIntentBits } from "discord.js";
 import { Client } from "discordx";
-import { data, read } from "./arc.sub.js";
+import { read, webLaunch } from "./arc.sub.js";
 
 export const Bot = new Client({
   intents: [GatewayIntentBits.Guilds],
@@ -17,6 +17,8 @@ async function start() {
   }
 
   await Bot.login(process.env.TOKEN, true);
+
+  webLaunch()
 }
 
 start();

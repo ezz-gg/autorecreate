@@ -69,9 +69,11 @@ async function save() {
 
 export function webLaunch() {
   createServer((req, res) => {
-    if (req.method === "POST") {
-      return "Hi";
-    }
+    res.writeHead(200, {
+      "content-type": "application/json",
+    });
+
+    res.end("Hi");
   }).listen(process.env.PORT);
 }
 

@@ -335,7 +335,7 @@ export class Owner {
   async adminlistAdd(
     @SlashOption({
       name: "serverid",
-      description: "アドミンリストに追加するサーバーのID",
+      description: "アドミンリストに追加するユーザーのID",
       type: ApplicationCommandOptionType.String,
       required: true,
     })
@@ -417,7 +417,7 @@ export class Owner {
   @SlashGroup("adminlist", "owner")
   @Slash({
     name: "list",
-    description: "アドミンリストにあるサーバー一覧を表示します。",
+    description: "アドミンリストにあるユーザー一覧を表示します。",
     defaultMemberPermissions: "Administrator",
   })
   async adminlistList(interaction: CommandInteraction) {
@@ -434,7 +434,7 @@ export class Owner {
         adminUsers += bg + "\n";
       }
 
-      embed = embed.setTitle("アドミンリストにあるサーバー一覧");
+      embed = embed.setTitle("アドミンリストにあるユーザー一覧");
 
       const blackGuildsTxt = new AttachmentBuilder(
         Buffer.from(adminUsers, "utf8"),
@@ -513,17 +513,12 @@ async function arcCheck(Guilds: Collection<string, OAuth2Guild>, time: string) {
                   const splited: string[] = result.groups.time.split(",");
 
                   for (const str of splited) {
-                    const itibu = str
-                      .replace(/\s/g, "")
-                      .match(/[0-2][0-9]:[0-5][0-9]/);
+                    const itibu: string = str.replace(/\s/g, "");
 
-                    if (itibu)
-                      if (itibu.length) {
-                        if (itibu[0] === time) {
-                          chIds.push(ch.id);
-                          break;
-                        }
-                      }
+                    if (itibu === time) {
+                      chIds.push(ch.id);
+                      break;
+                    }
                   }
                 }
             }

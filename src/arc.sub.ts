@@ -168,6 +168,7 @@ export class Other {
     });
   }
 }
+
 @Discord()
 @SlashGroup({ name: "owner" })
 @SlashGroup({ name: "blacklist", root: "owner" })

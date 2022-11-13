@@ -67,6 +67,14 @@ async function save() {
   await writeFile(file, JSON.stringify(data));
 }
 
+export function webLaunch() {
+  createServer((req, res) => {
+    if (req.method === "POST") {
+      return "Hi";
+    }
+  }).listen(process.env.PORT)
+}
+
 function DDHHMMSS(uptime: number, format: string) {
   let sec_num = parseInt(String(uptime), 10);
   let days: any = Math.floor(sec_num / 86400);
@@ -590,9 +598,3 @@ cron.schedule("0,5,10,15,20,25,30,35,40,45,50,55 * * * *", async (date) => {
 
   await save();
 });
-
-createServer((req, res) => {
-  if (req.method === "POST") {
-    return new Response("Hi")
-  }
-}).listen(process.env.PORT)

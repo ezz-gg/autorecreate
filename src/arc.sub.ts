@@ -497,9 +497,9 @@ async function arcCheck(Guilds: Collection<string, OAuth2Guild>, time: string) {
   for (const cha of g) {
     if (
       cha.members.me?.permissions.has(
-        PermissionsBitField.Flags.ManageChannels,
-        false
-      )
+        PermissionsBitField.Flags.ManageChannels
+      ) ||
+      cha.members.me?.permissions.has(PermissionsBitField.Flags.Administrator)
     ) {
       const c = await cha.channels.fetch();
 

@@ -12,7 +12,11 @@ async function start() {
 
   const ok = await read();
 
-  await Bot.login(data["token"], true);
+  if (!process.env.TOKEN) {
+    throw Error("system env の TOKEN にボットトークンをセットしてください。")
+  }
+
+  await Bot.login(process.env.TOKEN, true);
 }
 
 start();

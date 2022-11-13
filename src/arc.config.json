@@ -1,6 +1,5 @@
 {
-  "token": "",
-  "total": 0,
-  "admin": {},
-  "blacklist": {}
+    "total":0,
+    "admin":{},
+    "blacklist":{}
 }

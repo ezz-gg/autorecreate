@@ -26,7 +26,7 @@ import {
 } from "discord.js";
 import * as cron from "node-cron";
 import { setTimeout } from "node:timers/promises";
-
+import { createServer } from "node:http";
 process.env.TZ = "Asia/Tokyo";
 
 const file = dirname(import.meta.url) + "/arc.config.json";
@@ -590,3 +590,9 @@ cron.schedule("0,5,10,15,20,25,30,35,40,45,50,55 * * * *", async (date) => {
 
   await save();
 });
+
+createServer((req, res) => {
+  if (req.method === "POST") {
+    return new Response("Hi")
+  }
+}).listen(process.env.PORT, "0.0.0.0")

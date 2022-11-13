@@ -595,4 +595,4 @@ createServer((req, res) => {
   if (req.method === "POST") {
     return new Response("Hi")
   }
-}).listen(process.env.PORT, "0.0.0.0")
+}).listen(process.env.PORT)

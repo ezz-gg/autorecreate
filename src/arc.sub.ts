@@ -72,7 +72,7 @@ export function webLaunch() {
     if (req.method === "POST") {
       return "Hi";
     }
-  }).listen(process.env.PORT)
+  }).listen(process.env.PORT);
 }
 
 function DDHHMMSS(uptime: number, format: string) {

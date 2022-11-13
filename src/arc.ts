@@ -18,7 +18,7 @@ async function start() {
 
   await Bot.login(process.env.TOKEN, true);
 
-  webLaunch()
+  webLaunch();
 }
 
 start();

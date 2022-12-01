@@ -1,8 +1,5 @@
 # Auto Recreate
 
-
-## あっ矢部、ミスってBotを全サーバーから抜けさせてもうた；；
-
 ## 公式Bot
 
 https://discord.com/api/oauth2/authorize?client_id=1037546372406202470&permissions=16&scope=bot
